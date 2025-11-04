@@ -1,70 +1,63 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>تسجيل دخول الأدمن</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>دخول الأدمن | المنزل الراقي</title>
   <style>
     body {
       font-family: "Noto Kufi Arabic", sans-serif;
-      background: linear-gradient(160deg, #5e3b18, #1b120a);
+      background: linear-gradient(135deg, #4b2e18, #9c7a56);
+      color: #333;
       display: flex;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
       height: 100vh;
       margin: 0;
     }
 
     .login-box {
-      background: #fff;
+      background-color: #fff;
       padding: 30px;
       border-radius: 12px;
-      width: 340px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
       text-align: center;
-      box-shadow: 0 0 15px rgba(0,0,0,0.2);
-      animation: fadeIn 1s ease-in-out;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+      width: 350px;
     }
 
     h2 {
-      color: #5e3b18;
       margin-bottom: 20px;
+      color: #4b2e18;
     }
 
     input {
-      width: 90%;
-      padding: 10px;
-      margin: 8px 0;
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+      padding: 12px;
       border: 1px solid #ccc;
       border-radius: 6px;
       font-size: 15px;
-      direction: rtl;
     }
 
     button {
-      width: 95%;
-      padding: 10px;
-      background-color: #5e3b18;
-      color: white;
+      width: 100%;
+      padding: 12px;
       border: none;
-      border-radius: 6px;
+      background-color: #6d4c2f;
+      color: #fff;
       font-size: 16px;
+      border-radius: 6px;
       cursor: pointer;
-      margin-top: 10px;
-      transition: background 0.3s ease;
+      transition: 0.3s;
     }
 
     button:hover {
-      background-color: #7c5327;
+      background-color: #8a674a;
     }
 
     .error {
-      color: #c30000;
-      font-size: 14px;
+      color: #c0392b;
       margin-top: 10px;
     }
   </style>
@@ -72,81 +65,66 @@
 
 <body>
   <div class="login-box">
-    <h2>🔒 دخول الأدمن</h2>
-    <input type="email" id="email" placeholder="البريد الإلكتروني">
-    <input type="password" id="password" placeholder="كلمة المرور">
-    <button id="loginBtn">تسجيل الدخول</button>
-    <p class="error" id="errorText"></p>
+    <h2>🔐 دخول الأدمن</h2>
+    <form id="loginForm">
+      <input type="email" id="email" placeholder="البريد الإلكتروني" required />
+      <input type="password" id="password" placeholder="كلمة المرور" required />
+      <button type="submit">تسجيل الدخول</button>
+      <p class="error" id="errorText"></p>
+    </form>
   </div>
 
-  <!-- Firebase -->
+  <!-- 🔥 Firebase Login Script -->
   <script type="module">
     // استيراد مكتبات Firebase
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
 
-    // إعدادات Firebase الخاصة بمشروعك
-     const firebaseConfig = {
-  apiKey: "AIzaSyCSjQucZ3hrgjLvNGDOQ6HYVm1O_0yMEKw",
-  authDomain: "ions-59fd0.firebaseapp.com",
-  projectId: "ions-59fd0",
-  storageBucket: "ions-59fd0.firebasestorage.app",
-  messagingSenderId: "645809699837",
-  appId: "1:645809699837:web:03a8e3126bd3e8e8e6f794",
-  measurementId: "G-QW9MM55ZQS"
-};
+    // إعدادات Firebase (خاصة بمشروعك)
+    const firebaseConfig = {
+      apiKey: "AIzaSyCsjQucZ3hrgiLwGDOQ6HYVm10_0yMEKw",
+      authDomain: "ions-59fd0.firebaseapp.com",
+      projectId: "ions-59fd0",
+      storageBucket: "ions-59fd0.appspot.com",
+      messagingSenderId: "645809699837",
+      appId: "1:645809699837:web:03a8e3126bd3e8e8e6f794",
+      measurementId: "G-QW9MM55ZQS"
     };
 
     // تهيئة Firebase
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // عناصر الصفحة
-    const emailInput = document.getElementById("email");
-    const passwordInput = document.getElementById("password");
-    const loginBtn = document.getElementById("loginBtn");
+    // التعامل مع تسجيل الدخول
+    const loginForm = document.getElementById("loginForm");
     const errorText = document.getElementById("errorText");
 
-    // معلومات الأدمن المصرح له فقط
-    const adminEmail = "admin@eleganthome.com";
-
-    // تسجيل الدخول
-    loginBtn.addEventListener("click", async () => {
-      const email = emailInput.value.trim();
-      const password = passwordInput.value.trim();
-      errorText.textContent = "";
-
-      if (!email || !password) {
-        errorText.textContent = "❌ يرجى إدخال البريد وكلمة المرور.";
-        return;
-      }
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
 
       try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
-        // التحقق من صلاحية الأدمن فقط
-        if (user.email.toLowerCase() === adminEmail) {
-          localStorage.setItem("isAdmin", "true");
-          window.location.href = "admin.html"; // الانتقال إلى لوحة التحكم
+        // تحقق من أنه الأدمن
+        if (user.email === "admin@eleganthome.com") {
+          window.location.href = "admin.html"; // توجيه إلى لوحة التحكم
         } else {
-          errorText.textContent = "🚫 ليس لديك صلاحية الدخول إلى لوحة التحكم.";
+          errorText.textContent = "❌ ليس لديك صلاحية الدخول إلى لوحة التحكم.";
         }
-
       } catch (error) {
-        console.error("Firebase login error:", error);
+        console.error(error.code, error.message);
         switch (error.code) {
           case "auth/invalid-email":
-            errorText.textContent = "❌ البريد الإلكتروني غير صالح.";
+            errorText.textContent = "⚠️ البريد الإلكتروني غير صالح.";
             break;
           case "auth/user-not-found":
             errorText.textContent = "⚠️ المستخدم غير موجود.";
             break;
           case "auth/wrong-password":
-            errorText.textContent = "❌ كلمة المرور غير صحيحة.";
-            break;
-          case "auth/network-request-failed":
-            errorText.textContent = "⚠️ تحقق من اتصال الإنترنت.";
+            errorText.textContent = "⚠️ كلمة المرور غير صحيحة.";
             break;
           default:
             errorText.textContent = "⚠️ حدث خطأ أثناء تسجيل الدخول.";
