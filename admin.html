@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>لوحة تحكم الأدمن</title>
+  <title>لوحة تحكم الأدمن | المنزل الراقي</title>
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
   <style>
     body {
       font-family: "Noto Kufi Arabic", sans-serif;
@@ -83,7 +84,7 @@
 
   <div class="container">
     <h2>بيانات الحجوزات</h2>
-    <p class="loading" id="loading">جارِ تحميل البيانات...</p>
+    <p class="loading" id="loading">جارٍ تحميل البيانات...</p>
 
     <table id="bookingsTable" style="display:none;">
       <thead>
@@ -106,14 +107,15 @@
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
     import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    // ✅ إعدادات Firebase الخاصة بمشروعك
+    // ✅ إعدادات Firebase الجديدة
     const firebaseConfig = {
-      apiKey: "AIzaSyCzLxxxxxx",
-      authDomain: "eleganthome-59fd0.firebaseapp.com",
-      projectId: "eleganthome-59fd0",
-      storageBucket: "eleganthome-59fd0.appspot.com",
-      messagingSenderId: "108xxxxxxx",
-      appId: "1:108xxxxxx:web:xxxxxx"
+      apiKey: "AIzaSyCSjQucZ3hrgjLvNGDOQ6HYVm1O_0yMEKw",
+      authDomain: "ions-59fd0.firebaseapp.com",
+      projectId: "ions-59fd0",
+      storageBucket: "ions-59fd0.firebasestorage.app",
+      messagingSenderId: "645809699837",
+      appId: "1:645809699837:web:03a8e3126bd3e8e8e6f794",
+      measurementId: "G-QW9MM55ZQS"
     };
 
     // ✅ تهيئة التطبيق والخدمات
