@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>لوحة تحكم المشرف - المنزل الراقي</title>
+  <style>
+    body {
+      font-family: "Noto Kufi Arabic", sans-serif;
+      background-color: #f8f8f8;
+      margin: 0;
+      padding: 20px;
+      direction: rtl;
+      color: #333;
+    }
+    h1 {
+      color: #5e3b18;
+      text-align: center;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+      background-color: #d6c2a3;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <h1>📋 لوحة تحكم المشرف</h1>
+  <table id="bookingsTable">
+    <thead>
+      <tr>
+        <th>الخدمة</th>
+        <th>التاريخ</th>
+        <th>الوقت</th>
+        <th>الملاحظات</th>
+        <th>تاريخ الإدخال</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script type="module">
+    // استيراد Firebase
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    // إعداد Firebase (نفس الإعداد الذي في booking.html)
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "ions-59fd0.firebaseapp.com",
+      projectId: "ions-59fd0",
+      storageBucket: "ions-59fd0.appspot.com",
+      messagingSenderId: "645896099837",
+      appId: "1:645896099837:web:083a3e126db3e8e8e6f794",
+      measurementId: "G-QW9M55ZSQS"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    // التحقق من المستخدم الحالي
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        // المستخدم مسموح له بالدخول
+        const bookingsSnapshot = await getDocs(collection(db, "bookings"));
+        const tableBody = document.querySelector("#bookingsTable tbody");
+
+        bookingsSnapshot.forEach((doc) => {
+          const data = doc.data();
+          const row = `
+            <tr>
+              <td>${data.service}</td>
+              <td>${data.date}</td>
+              <td>${data.time}</td>
+              <td>${data.notes}</td>
+              <td>${new Date(data.createdAt).toLocaleString()}</td>
+            </tr>`;
+          tableBody.innerHTML += row;
+        });
+      } else {
+        alert("🚫 لا تملك صلاحية الوصول إلى لوحة التحكم");
+        window.location.href = "index.html"; // يرجع المستخدم للصفحة الرئيسية
+      }
+    });
+  </script>
+</body>
+</html>
