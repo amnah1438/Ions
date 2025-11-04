@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>تسجيل دخول الإدمن</title>
+  <style>
+    body {
+      font-family: "Noto Kufi Arabic", sans-serif;
+      background: linear-gradient(160deg, #1b120a, #5e3b18);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .login-box {
+      background: #fff;
+      color: #333;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      width: 320px;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      color: #5e3b18;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-family: inherit;
+    }
+
+    button {
+      background: #5e3b18;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      border-radius: 5px;
+      width: 100%;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #7a5120;
+    }
+
+    p#error {
+      color: red;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <h2>🔐 دخول الإدمن</h2>
+    <input type="email" id="email" placeholder="البريد الإلكتروني" required />
+    <input type="password" id="password" placeholder="كلمة المرور" required />
+    <button id="loginBtn">تسجيل الدخول</button>
+    <p id="error"></p>
+  </div>
+
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCjsQucz3hrgiLvNGD06HYVm1o_0yMEkw",
+      authDomain: "ions-59fd0.firebaseapp.com",
+      projectId: "ions-59fd0",
+      storageBucket: "ions-59fd0.appspot.com",
+      messagingSenderId: "645806999387",
+      appId: "1:645806999387:web:08a3eb126bd3e8e86f794",
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const loginBtn = document.getElementById("loginBtn");
+    const errorText = document.getElementById("error");
+
+    loginBtn.addEventListener("click", async () => {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        window.location.href = "admin.html"; // بعد تسجيل الدخول الناجح
+      } catch (error) {
+        errorText.textContent = "❌ فشل تسجيل الدخول، تحقق من البيانات";
+        console.error(error.message);
+      }
+    });
+  </script>
+</body>
+</html>
