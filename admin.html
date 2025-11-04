@@ -3,80 +3,106 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>لوحة تحكم المشرف - المنزل الراقي</title>
+  <title>لوحة تحكم الأدمن</title>
   <style>
     body {
       font-family: "Noto Kufi Arabic", sans-serif;
-      background-color: #f8f8f8;
+      background: linear-gradient(160deg, #1b120a, #5e3b18);
+      color: #fff;
       margin: 0;
       padding: 20px;
-      direction: rtl;
-      color: #333;
     }
+
     h1 {
-      color: #5e3b18;
       text-align: center;
+      color: #f5d7b1;
     }
+
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 20px;
-    }
-    th, td {
-      border: 1px solid #ccc;
-      padding: 10px;
-      text-align: center;
-    }
-    th {
-      background-color: #d6c2a3;
+      background: #fff;
       color: #333;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: center;
+      border-bottom: 1px solid #ccc;
+    }
+
+    th {
+      background: #5e3b18;
+      color: #fff;
+    }
+
+    tr:hover {
+      background: #f9f4ef;
+    }
+
+    .logout {
+      background: #a83e32;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 20px 0;
+      float: left;
+    }
+
+    .logout:hover {
+      background: #c24b40;
     }
   </style>
 </head>
 <body>
-  <h1>📋 لوحة تحكم المشرف</h1>
-  <table id="bookingsTable">
+  <button class="logout" id="logoutBtn">تسجيل الخروج</button>
+  <h1>📋 لوحة تحكم الأدمن</h1>
+  <table>
     <thead>
       <tr>
         <th>الخدمة</th>
         <th>التاريخ</th>
         <th>الوقت</th>
         <th>الملاحظات</th>
-        <th>تاريخ الإدخال</th>
+        <th>تاريخ الإرسال</th>
       </tr>
     </thead>
-    <tbody></tbody>
+    <tbody id="bookingsTable"></tbody>
   </table>
 
+  <!-- Firebase -->
   <script type="module">
-    // استيراد Firebase
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
 
-    // إعداد Firebase (نفس الإعداد الذي في booking.html)
     const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
+      apiKey: "AIzaSyCjsQucz3hrgiLvNGD06HYVm1o_0yMEkw",
       authDomain: "ions-59fd0.firebaseapp.com",
       projectId: "ions-59fd0",
       storageBucket: "ions-59fd0.appspot.com",
-      messagingSenderId: "645896099837",
-      appId: "1:645896099837:web:083a3e126db3e8e8e6f794",
-      measurementId: "G-QW9M55ZSQS"
+      messagingSenderId: "645806999387",
+      appId: "1:645806999387:web:08a3eb126bd3e8e86f794",
     };
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     const auth = getAuth(app);
 
-    // التحقق من المستخدم الحالي
-    onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        // المستخدم مسموح له بالدخول
-        const bookingsSnapshot = await getDocs(collection(db, "bookings"));
-        const tableBody = document.querySelector("#bookingsTable tbody");
+    const tableBody = document.getElementById("bookingsTable");
+    const logoutBtn = document.getElementById("logoutBtn");
 
-        bookingsSnapshot.forEach((doc) => {
+    // التحقق من تسجيل الدخول
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "login.html"; // يرجع لصفحة الدخول إذا مو مسجل
+      } else {
+        const querySnapshot = await getDocs(collection(db, "bookings"));
+        querySnapshot.forEach((doc) => {
           const data = doc.data();
           const row = `
             <tr>
@@ -84,14 +110,18 @@
               <td>${data.date}</td>
               <td>${data.time}</td>
               <td>${data.notes}</td>
-              <td>${new Date(data.createdAt).toLocaleString()}</td>
-            </tr>`;
+              <td>${data.createdAt}</td>
+            </tr>
+          `;
           tableBody.innerHTML += row;
         });
-      } else {
-        alert("🚫 لا تملك صلاحية الوصول إلى لوحة التحكم");
-        window.location.href = "index.html"; // يرجع المستخدم للصفحة الرئيسية
       }
+    });
+
+    // تسجيل الخروج
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "login.html";
     });
   </script>
 </body>
