@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>نموذج الحجز - المنزل الراقي</title>
+
   <style>
     body {
       font-family: "Noto Kufi Arabic", sans-serif;
@@ -25,6 +26,7 @@
 
     h2 {
       color: #6b4f3b;
+      margin-bottom: 10px;
     }
 
     label {
@@ -42,6 +44,7 @@
       border: 1px solid #ccc;
       border-radius: 6px;
       font-family: inherit;
+      font-size: 15px;
     }
 
     button {
@@ -57,16 +60,25 @@
       background-color: #503828;
     }
 
-    .success-message {
+    .message {
       display: none;
-      background-color: #d4edda;
-      color: #155724;
-      border: 1px solid #c3e6cb;
       padding: 12px;
       border-radius: 6px;
       margin-bottom: 15px;
-      text-align: center;
       font-weight: bold;
+      text-align: center;
+    }
+
+    .success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .error {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
     }
 
     .links {
@@ -78,14 +90,22 @@
       color: #6b4f3b;
       text-decoration: none;
       margin: 0 8px;
+      font-weight: bold;
+    }
+
+    .links a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <h2>🪶 نموذج الحجز</h2>
-    <div id="successMessage" class="success-message">✅ تم إرسال الحجز بنجاح!</div>
 
+    <!-- رسائل النجاح أو الخطأ -->
+    <div id="messageBox" class="message"></div>
+
+    <!-- نموذج الحجز -->
     <form id="bookingForm">
       <label for="service">اختر الخدمة:</label>
       <select id="service" name="service" required>
@@ -108,7 +128,7 @@
     </form>
 
     <div class="links">
-      <a href="index.html">العودة للصفحة الرئيسية</a>
+      <a href="index.html">🏠 العودة للصفحة الرئيسية</a>
     </div>
   </div>
 
@@ -117,29 +137,48 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
     import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 
+    // إعداد Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyCSj0uczZh3rjglVNGD0GHYVm1O_8yMEKw",
       authDomain: "ions-59fd0.firebaseapp.com",
       projectId: "ions-59fd0",
-      storageBucket: "ions-59fd0.firebasestorage.app",
+      storageBucket: "ions-59fd0.appspot.com",
       messagingSenderId: "64589609837",
       appId: "1:64589609837:web:083a8e3126db3e8e86f794",
       measurementId: "G-Q9WMMS52SQ"
     };
 
+    // تهيئة التطبيق وقاعدة البيانات
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
+    // عناصر الصفحة
     const form = document.getElementById("bookingForm");
-    const successMessage = document.getElementById("successMessage");
+    const messageBox = document.getElementById("messageBox");
 
+    // وظيفة عرض الرسائل
+    function showMessage(text, type = "success") {
+      messageBox.textContent = text;
+      messageBox.className = `message ${type}`;
+      messageBox.style.display = "block";
+      setTimeout(() => {
+        messageBox.style.display = "none";
+      }, 4000);
+    }
+
+    // معالجة الإرسال
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      const service = form.service.value;
+      const service = form.service.value.trim();
       const date = form.date.value;
       const time = form.time.value;
-      const notes = form.notes.value;
+      const notes = form.notes.value.trim();
+
+      if (!service || !date || !time) {
+        showMessage("⚠️ يرجى تعبئة جميع الحقول المطلوبة.", "error");
+        return;
+      }
 
       try {
         await addDoc(collection(db, "bookings"), {
@@ -149,15 +188,11 @@
           notes,
           createdAt: new Date().toISOString()
         });
-        successMessage.style.display = "block";
+        showMessage("✅ تم إرسال الحجز بنجاح!", "success");
         form.reset();
-
-        setTimeout(() => {
-          successMessage.style.display = "none";
-        }, 4000);
       } catch (error) {
-        alert("❌ حدث خطأ أثناء إرسال البيانات: " + error.message);
-        console.error(error);
+        console.error("Firestore Error:", error);
+        showMessage("❌ حدث خطأ أثناء إرسال البيانات. حاول مجددًا.", "error");
       }
     });
   </script>
