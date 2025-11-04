@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>تواصلي معنا — المنزل الراقي</title>
+  <style>
+    body{
+      margin:0;
+      font-family:"Noto Kufi Arabic",system-ui;
+      background:linear-gradient(160deg,#1b120a,#5e3b18);
+      color:#fff;
+      display:flex;
+      flex-direction:column;
+      min-height:100vh;
+    }
+    header{
+      text-align:center;
+      padding:40px 10px 20px;
+      color:#f5d7b1;
+      font-weight:800;
+      font-size:1.8rem;
+      letter-spacing:.5px;
+    }
+    p.subtitle{
+      text-align:center;
+      color:#f3eadf;
+      opacity:.9;
+      margin-top:-10px;
+      margin-bottom:30px;
+      font-size:1rem;
+    }
+    .contact-container{
+      flex:1;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:40px 20px;
+    }
+    form{
+      background:rgba(255,255,255,.07);
+      border:1px solid rgba(255,255,255,.15);
+      padding:28px 26px;
+      border-radius:18px;
+      box-shadow:0 0 18px rgba(0,0,0,.3);
+      width:100%;
+      max-width:500px;
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+      animation:fadeIn .8s ease;
+    }
+    label{font-weight:600}
+    input,textarea{
+      width:100%;
+      padding:10px 12px;
+      border-radius:10px;
+      border:none;
+      outline:none;
+      background:rgba(255,255,255,.15);
+      color:#fff;
+      font-size:.95rem;
+    }
+    textarea{min-height:120px;resize:none}
+    button{
+      background:linear-gradient(135deg,#f5d7b1,#d9b384);
+      color:#1b120a;
+      border:none;
+      border-radius:999px;
+      padding:12px 20px;
+      font-weight:700;
+      cursor:pointer;
+      transition:.3s;
+    }
+    button:hover{transform:scale(1.05)}
+    footer{
+      text-align:center;
+      padding:18px;
+      font-size:.85rem;
+      opacity:.8;
+      border-top:1px solid rgba(255,255,255,.1);
+    }
+    @keyframes fadeIn{
+      from{opacity:0;transform:translateY(20px)}
+      to{opacity:1;transform:translateY(0)}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ✅ الشريط العلوي -->
+  <div id="header-container"></div>
+
+  <header>📞 تواصلي معنا</header>
+  <p class="subtitle">يسعدنا تواصلك معنا في أي وقت حول منتجات <strong>المنزل الراقي</strong></p>
+
+  <div class="contact-container">
+    <form id="contact-form">
+      <label for="name">الاسم الكامل</label>
+      <input type="text" id="name" name="name" placeholder="اكتبي اسمك هنا" required />
+
+      <label for="email">البريد الإلكتروني</label>
+      <input type="email" id="email" name="email" placeholder="example@email.com" required />
+
+      <label for="message">الرسالة</label>
+      <textarea id="message" name="message" placeholder="اكتبي رسالتك هنا..." required></textarea>
+
+      <button type="submit">إرسال الرسالة</button>
+    </form>
+  </div>
+
+  <footer>
+    &copy; 2025 المنزل الراقي — جميع الحقوق محفوظة
+  </footer>
+
+  <script>
+    // تحميل الشريط العلوي تلقائيًا
+    fetch('header.html')
+      .then(r => r.text())
+      .then(html => document.getElementById('header-container').innerHTML = html);
+
+    // إرسال النموذج (محلي تجريبي)
+    document.getElementById('contact-form').addEventListener('submit', e => {
+      e.preventDefault();
+      alert('✅ تم إرسال رسالتك بنجاح! سنتواصل معك قريبًا.');
+      e.target.reset();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * {margin:0;padding:0;box-sizing:border-box;}
+    body {font-family:"Noto Kufi Arabic", system-ui;}
+
+    header {
+      background: linear-gradient(160deg, #1b120a, #5e3b18);
+      color: #fff;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 999;
+    }
+
+    .logo {
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+
+    nav {
+      display: flex;
+      gap: 20px;
+    }
+
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+    nav a:hover {
+      color: #f5d7b1;
+    }
+
+    /* زر البرجر */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      gap: 5px;
+    }
+
+    .hamburger span {
+      width: 25px;
+      height: 3px;
+      background: #fff;
+      border-radius: 2px;
+    }
+
+    /* القائمة الجانبية للجوال */
+    .drawer {
+      position: fixed;
+      top: 0;
+      right: -70%;
+      width: 70%;
+      height: 100%;
+      background: linear-gradient(180deg, #1b120a, #5e3b18);
+      display: flex;
+      flex-direction: column;
+      padding: 100px 20px;
+      transition: right 0.4s ease-in-out;
+      z-index: 1000;
+    }
+
+    .drawer a {
+      color: #fff;
+      font-size: 1.1rem;
+      text-decoration: none;
+      margin-bottom: 20px;
+    }
+
+    .drawer.open {
+      right: 0;
+    }
+
+    @media (max-width: 768px) {
+      nav {display: none;}
+      .hamburger {display: flex;}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">🏠 المنزل الراقي</div>
+
+    <nav>
+      <a href="index.html">الرئيسية</a>
+      <a href="store.html">المتجر</a>
+      <a href="offers.html">العروض</a>
+      <a href="contact.html">تواصلي معنا</a>
+    </nav>
+
+    <div class="hamburger" id="menu-btn">
+      <span></span><span></span><span></span>
+    </div>
+
+    <div class="drawer" id="drawer">
+      <a href="index.html">الرئيسية</a>
+      <a href="store.html">المتجر</a>
+      <a href="offers.html">العروض</a>
+      <a href="contact.html">تواصلي معنا</a>
+    </div>
+  </header>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const menuBtn = document.getElementById("menu-btn");
+      const drawer = document.getElementById("drawer");
+
+      if (menuBtn && drawer) {
+        menuBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          drawer.classList.toggle("open");
+        });
+
+        document.addEventListener("click", (e) => {
+          if (!drawer.contains(e.target) && !menuBtn.contains(e.target)) {
+            drawer.classList.remove("open");
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>

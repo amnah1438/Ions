@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>فوتر — المنزل الراقي</title>
+  <style>
+    :root{
+      --wood-2:#5e3b18; --dark-2:#0f0e0e;
+      --beige-1:#f3eadf; --beige-2:#e8dccf;
+    }
+    *,*::before,*::after{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Kufi Arabic",sans-serif;color:#fff}
+    footer.site-footer{background:linear-gradient(160deg,var(--dark-2),var(--wood-2));padding:32px 18px}
+    .grid{display:grid;gap:18px;grid-template-columns:repeat(12,1fr);max-width:1200px;margin-inline:auto}
+    .col{grid-column:span 12}
+    .logo{display:flex;align-items:center;gap:12px}
+    .logo img{width:48px;height:48px;border-radius:50%;outline:2px solid rgba(255,255,255,.25)}
+    .muted{color:rgba(255,255,255,.7);line-height:1.8}
+    .links a{display:block;color:#fff;text-decoration:none;margin:6px 0}
+    .links a:hover{text-decoration:underline}
+    .copy{margin-top:16px;color:rgba(255,255,255,.65);font-size:.9rem}
+    .inputs{display:flex;gap:8px;margin-top:12px}
+    .inputs input{flex:1;border-radius:12px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.06);color:#fff;padding:10px}
+    .inputs button{border:0;border-radius:12px;padding:10px 14px;background:#e0c29e;color:#3b2a14}
+    @media (min-width:680px){
+      .col-4{grid-column:span 4}
+      .col-3{grid-column:span 3}
+      .col-5{grid-column:span 5}
+    }
+  </style>
+</head>
+<body>
+  <footer class="site-footer" role="contentinfo">
+    <div class="grid">
+      <div class="col col-4">
+        <div class="logo">
+          <img src="media/coffe.JPG" alt="شعار المنزل الراقي">
+          <div>
+            <strong>المنزل الراقي</strong>
+            <div class="muted">قطع منزلية مختارة بعناية، تجمع الخشب والبيج بلمسة فاخرة.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col col-3">
+        <strong>روابط</strong>
+        <div class="links">
+          <a href="/">الرئيسية</a>
+          <a href="/store">المتجر</a>
+          <a href="/offers">العروض</a>
+          <a href="/contact">تواصل</a>
+        </div>
+      </div>
+
+      <div class="col col-5">
+        <strong>انضم للنشرة البريدية</strong>
+        <div class="inputs">
+          <input id="newsletter-email" type="email" inputmode="email" autocomplete="email" placeholder="اكتبي بريدك الإلكتروني">
+          <button id="btn-sub">اشتركي</button>
+        </div>
+        <div id="news-msg" class="muted" aria-live="polite" style="margin-top:8px;"></div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="col copy">© <span id="year"></span> المنزل الراقي — جميع الحقوق محفوظة.</div>
+    </div>
+  </footer>
+
+  <script>
+    // سنة تلقائية
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // اشتراك (تنظيف إدخال مبسّط)
+    const emailInput = document.getElementById('newsletter-email');
+    const msg = document.getElementById('news-msg');
+    document.getElementById('btn-sub')?.addEventListener('click', ()=>{
+      const email = String(emailInput.value||'').replace(/[<>\s]/g,'').toLowerCase();
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+        msg.textContent = 'رجاءً أدخلي بريداً صحيحاً.'; msg.style.color = '#ffd2d2'; return;
+      }
+      msg.textContent = 'تم الاشتراك — شكراً لكِ! (تجريبي)'; msg.style.color = '#c6ffd2';
+      emailInput.value = '';
+    });
+  </script>
+</body>
+</html>

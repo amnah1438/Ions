@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🏠 المنزل الراقي — الرئيسية</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    html,body{
+      width:100%;
+      height:100%;
+      font-family:"Noto Kufi Arabic",system-ui,-apple-system,sans-serif;
+      color:#fff;
+      background:#000;
+      overflow-x:hidden;
+    }
+
+    /* البنر بالفيديو */
+    .video-container{
+      position:relative;
+      width:100%;
+      height:100vh;
+      overflow:hidden;
+    }
+    .video-container video{
+      position:absolute;
+      top:50%;left:50%;
+      min-width:100%;min-height:100%;
+      transform:translate(-50%,-50%);
+      object-fit:cover;
+      filter:brightness(70%);
+      z-index:1;
+    }
+    .overlay{
+      position:absolute;
+      inset:0;
+      z-index:2;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      background:rgba(0,0,0,0.25);
+      animation:fadeIn 2s ease-in-out;
+    }
+    .overlay h1{
+      font-size:2.2rem;
+      margin-bottom:16px;
+      text-shadow:2px 2px 8px rgba(0,0,0,.7);
+      animation:slideIn 1s ease forwards;
+    }
+    .overlay p{
+      font-size:1rem;
+      max-width:700px;
+      line-height:1.6;
+      opacity:0;
+      animation:fadeInText 1.8s ease forwards .6s;
+    }
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    @keyframes slideIn{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
+    @keyframes fadeInText{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+    @media(max-width:768px){
+      .overlay h1{font-size:1.5rem;}
+      .overlay p{font-size:.9rem;padding:0 20px;}
+    }
+
+    /* قسم بسيط بعد البنر */
+    .section{
+      background:linear-gradient(180deg,rgba(0,0,0,0) 0%,#1b120a 40%,#5e3b18 100%);
+      padding:40px 20px;
+    }
+    .wrap{max-width:1200px;margin:auto;}
+    .cards{
+      display:grid;
+      gap:20px;
+      grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    }
+    .card{
+      background:rgba(255,255,255,0.08);
+      border:1px solid rgba(255,255,255,0.15);
+      border-radius:14px;
+      padding:20px;
+      text-align:center;
+      backdrop-filter:blur(6px);
+    }
+    .card h3{margin-bottom:10px;color:#f5d7b1;}
+    .card p{color:#eee;opacity:.9;}
+  </style>
+</head>
+<body>
+
+  <!-- الشريط العلوي -->
+  <div id="header-container"></div>
+
+  <!-- البنر الرئيسي -->
+  <div class="video-container" role="region" aria-label="عرض تسويقي">
+    <video autoplay muted loop playsinline>
+      <source src="media/home.mp4" type="video/mp4" />
+      متصفحك لا يدعم تشغيل الفيديو.
+    </video>
+    <div class="overlay">
+      <h1>🏠 المنزل الراقي — فخامة التفاصيل تبدأ من هنا</h1>
+      <p>نقدم لكِ مجموعة من المنتجات المنزلية الخشبية الفاخرة بألوان البيج والأناقة الهادئة لتنعمي بمساحة تجمع البساطة بالفخامة.</p>
+    </div>
+  </div>
+
+  <!-- قسم تعريفي بسيط -->
+  <section class="section">
+    <div class="wrap">
+      <div class="cards">
+        <div class="card">
+          <h3>جودة مختارة</h3>
+          <p>منتجات بعناية عالية لتدوم وتمنحك تجربة استخدام فاخرة.</p>
+        </div>
+        <div class="card">
+          <h3>تصميمات أنيقة</h3>
+          <p>ألوان خشبية وبيج متدرج تعكس ذوقك الراقي.</p>
+        </div>
+        <div class="card">
+          <h3>عروض مستمرة</h3>
+          <p>تخفيضات موسمية وهدايا مميزة لكل ركن في منزلك.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- الشريط السفلي -->
+  <div id="footer-container"></div>
+
+  <!-- تحميل الهيدر والفوتر وتفعيل قائمة الجوال -->
+  <script>
+    // تحميل الهيدر والفوتر
+    Promise.all([
+      fetch('header.html').then(r => r.text()),
+      fetch('footer.html').then(r => r.text())
+    ])
+    .then(([header, footer]) => {
+      document.getElementById('header-container').innerHTML = header;
+      document.getElementById('footer-container').innerHTML = footer;
+      initBurgerMenu(); // ← تفعيل القائمة بعد تحميلها
+    })
+    .catch(err => console.error('خطأ في تحميل القوالب:', err));
+
+    // تفعيل زر البرجر للجوال
+    function initBurgerMenu() {
+      const menuBtn = document.getElementById("menu-btn");
+      const drawer = document.getElementById("drawer");
+
+      if (!menuBtn || !drawer) {
+        console.warn("⚠️ لم يتم العثور على عناصر القائمة");
+        return;
+      }
+
+      menuBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        drawer.classList.toggle("open");
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!drawer.contains(e.target) && !menuBtn.contains(e.target)) {
+          drawer.classList.remove("open");
+        }
+      });
+    }
+  </script>
+</body>
+</html>
