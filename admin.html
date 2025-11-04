@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>لوحة تحكم الأدمن</title>
+  <style>
+    body {
+      font-family: "Noto Kufi Arabic", sans-serif;
+      background-color: #f4f1ee;
+      margin: 0;
+      padding: 0;
+      direction: rtl;
+    }
+
+    header {
+      background: #5e3b18;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      font-size: 1.3rem;
+      font-weight: bold;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 30px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #5e3b18;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    table, th, td {
+      border: 1px solid #ddd;
+      text-align: center;
+      padding: 10px;
+    }
+
+    th {
+      background-color: #5e3b18;
+      color: white;
+    }
+
+    .logout-btn {
+      background: #b33a3a;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 15px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .logout-btn:hover {
+      background: #922a2a;
+    }
+
+    .loading {
+      text-align: center;
+      color: #555;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>📊 لوحة تحكم الأدمن</header>
+
+  <div class="container">
+    <h2>بيانات الحجوزات</h2>
+    <p class="loading" id="loading">جارِ تحميل البيانات...</p>
+
+    <table id="bookingsTable" style="display:none;">
+      <thead>
+        <tr>
+          <th>الاسم</th>
+          <th>رقم الجوال</th>
+          <th>التاريخ</th>
+          <th>الخدمة</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <button class="logout-btn" id="logout">تسجيل الخروج</button>
+  </div>
+
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    // ✅ إعدادات Firebase الخاصة بمشروعك
+    const firebaseConfig = {
+      apiKey: "AIzaSyCzLxxxxxx",
+      authDomain: "eleganthome-59fd0.firebaseapp.com",
+      projectId: "eleganthome-59fd0",
+      storageBucket: "eleganthome-59fd0.appspot.com",
+      messagingSenderId: "108xxxxxxx",
+      appId: "1:108xxxxxx:web:xxxxxx"
+    };
+
+    // ✅ تهيئة التطبيق والخدمات
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // ✅ التحقق من المستخدم
+    onAuthStateChanged(auth, async (user) => {
+      const loadingText = document.getElementById("loading");
+      const table = document.getElementById("bookingsTable");
+
+      if (user && user.email === "admin@eleganthome.com") {
+        try {
+          const querySnapshot = await getDocs(collection(db, "bookings"));
+          const tableBody = table.querySelector("tbody");
+          tableBody.innerHTML = "";
+
+          querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            const row = `
+              <tr>
+                <td>${data.name || "-"}</td>
+                <td>${data.phone || "-"}</td>
+                <td>${data.date || "-"}</td>
+                <td>${data.service || "-"}</td>
+              </tr>`;
+            tableBody.innerHTML += row;
+          });
+
+          loadingText.style.display = "none";
+          table.style.display = "table";
+        } catch (error) {
+          loadingText.textContent = "حدث خطأ أثناء تحميل البيانات.";
+          console.error("Firestore error:", error);
+        }
+      } else {
+        alert("غير مصرح بالدخول 🚫");
+        window.location.href = "login.html";
+      }
+    });
+
+    // ✅ تسجيل الخروج
+    document.getElementById("logout").addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "login.html";
+    });
+  </script>
+</body>
+</html>
