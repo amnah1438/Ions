@@ -7,54 +7,69 @@
   <style>
     body {
       font-family: "Noto Kufi Arabic", sans-serif;
-      background: #6a4e36;
+      background: linear-gradient(160deg, #5e3b18, #1b120a);
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
       margin: 0;
     }
+
     .login-box {
       background: #fff;
-      padding: 25px 30px;
-      border-radius: 10px;
-      width: 350px;
+      padding: 30px;
+      border-radius: 12px;
+      width: 340px;
       text-align: center;
-      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      animation: fadeIn 1s ease-in-out;
     }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     h2 {
-      color: #6a4e36;
+      color: #5e3b18;
       margin-bottom: 20px;
     }
+
     input {
       width: 90%;
       padding: 10px;
-      margin: 10px 0;
+      margin: 8px 0;
       border: 1px solid #ccc;
       border-radius: 6px;
-      font-size: 14px;
+      font-size: 15px;
       direction: rtl;
     }
+
     button {
       width: 95%;
       padding: 10px;
+      background-color: #5e3b18;
+      color: white;
       border: none;
       border-radius: 6px;
-      background: #6a4e36;
-      color: white;
       font-size: 16px;
       cursor: pointer;
+      margin-top: 10px;
+      transition: background 0.3s ease;
     }
+
     button:hover {
-      background: #8b654b;
+      background-color: #7c5327;
     }
+
     .error {
-      color: #b30000;
+      color: #c30000;
       font-size: 14px;
       margin-top: 10px;
     }
   </style>
 </head>
+
 <body>
   <div class="login-box">
     <h2>🔒 دخول الأدمن</h2>
@@ -70,7 +85,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
 
-    // إعدادات مشروعك من Firebase
+    // إعدادات Firebase الخاصة بمشروعك
     const firebaseConfig = {
       apiKey: "AIzaSyCsjQucZ3hrgiLwGDOQ6HYVm10_0yMEKw",
       authDomain: "ions-59fd0.firebaseapp.com",
@@ -91,6 +106,9 @@
     const loginBtn = document.getElementById("loginBtn");
     const errorText = document.getElementById("errorText");
 
+    // معلومات الأدمن المصرح له فقط
+    const adminEmail = "admin@eleganthome.com";
+
     // تسجيل الدخول
     loginBtn.addEventListener("click", async () => {
       const email = emailInput.value.trim();
@@ -107,23 +125,27 @@
         const user = userCredential.user;
 
         // التحقق من صلاحية الأدمن فقط
-        if (user.email.toLowerCase() === "admin@eleganthome.com") {
-          window.location.href = "admin.html";
+        if (user.email.toLowerCase() === adminEmail) {
+          localStorage.setItem("isAdmin", "true");
+          window.location.href = "admin.html"; // الانتقال إلى لوحة التحكم
         } else {
-          errorText.textContent = "❌ ليس لديك صلاحية الدخول إلى لوحة التحكم.";
+          errorText.textContent = "🚫 ليس لديك صلاحية الدخول إلى لوحة التحكم.";
         }
 
       } catch (error) {
-        console.error(error);
+        console.error("Firebase login error:", error);
         switch (error.code) {
           case "auth/invalid-email":
             errorText.textContent = "❌ البريد الإلكتروني غير صالح.";
             break;
           case "auth/user-not-found":
-            errorText.textContent = "❌ المستخدم غير موجود.";
+            errorText.textContent = "⚠️ المستخدم غير موجود.";
             break;
           case "auth/wrong-password":
             errorText.textContent = "❌ كلمة المرور غير صحيحة.";
+            break;
+          case "auth/network-request-failed":
+            errorText.textContent = "⚠️ تحقق من اتصال الإنترنت.";
             break;
           default:
             errorText.textContent = "⚠️ حدث خطأ أثناء تسجيل الدخول.";
