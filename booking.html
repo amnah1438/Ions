@@ -3,128 +3,163 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>نموذج الحجز والتواصل - المنزل الراقي</title>
+  <title>نموذج الحجز - المنزل الراقي</title>
   <style>
     body {
-      font-family: "NotoKufiArabic", sans-serif;
-      background-color: #f5f3ef;
-      color: #333;
+      font-family: "Noto Kufi Arabic", sans-serif;
+      background-color: #f9f6f3;
+      color: #3b2f2f;
       margin: 0;
       padding: 0;
     }
 
     .container {
-      width: 90%;
-      max-width: 650px;
-      margin: 70px auto;
-      background: #fff;
-      padding: 30px;
+      max-width: 600px;
+      margin: 80px auto;
+      padding: 25px;
+      background-color: #fff;
       border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: center;
     }
 
-    h1 {
-      text-align: center;
-      color: #6a4e36;
-      margin-bottom: 25px;
+    h2 {
+      color: #6b4f3b;
     }
 
     label {
       display: block;
-      margin-bottom: 8px;
-      color: #444;
+      margin-top: 15px;
+      margin-bottom: 5px;
+      text-align: right;
       font-weight: bold;
     }
 
-    input, select, textarea {
+    input, textarea, select, button {
       width: 100%;
       padding: 10px;
       margin-bottom: 15px;
       border: 1px solid #ccc;
       border-radius: 6px;
-      font-size: 15px;
-      box-sizing: border-box;
+      font-family: inherit;
     }
 
     button {
-      width: 100%;
-      background-color: #8b6b4f;
+      background-color: #6b4f3b;
       color: #fff;
-      border: none;
-      padding: 12px;
-      border-radius: 6px;
-      font-size: 16px;
+      font-weight: bold;
       cursor: pointer;
-      transition: background 0.3s;
+      border: none;
+      transition: 0.3s;
     }
 
     button:hover {
-      background-color: #6a4e36;
+      background-color: #503828;
+    }
+
+    .success-message {
+      display: none;
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 15px;
+      text-align: center;
+      font-weight: bold;
     }
 
     .links {
-      margin-top: 20px;
       text-align: center;
+      margin-top: 20px;
     }
 
     .links a {
-      display: inline-block;
-      margin: 8px;
-      color: #8b6b4f;
+      color: #6b4f3b;
       text-decoration: none;
-      font-weight: bold;
-      border: 1px solid #8b6b4f;
-      padding: 8px 14px;
-      border-radius: 6px;
-      transition: all 0.3s ease;
-    }
-
-    .links a:hover {
-      background-color: #8b6b4f;
-      color: #fff;
+      margin: 0 8px;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>نموذج الحجز والتواصل</h1>
+    <h2>🪶 نموذج الحجز</h2>
+    <div id="successMessage" class="success-message">✅ تم إرسال الحجز بنجاح!</div>
 
-    <form action="https://example.com/submit" method="post">
-      <label for="name">الاسم الكامل</label>
-      <input type="text" id="name" name="name" placeholder="اكتب اسمك الكامل" required />
-
-      <label for="phone">رقم الجوال</label>
-      <input type="tel" id="phone" name="phone" placeholder="05xxxxxxxx" required pattern="05[0-9]{8}" />
-
-      <label for="email">البريد الإلكتروني</label>
-      <input type="email" id="email" name="email" placeholder="example@email.com" required />
-
-      <label for="service">الخدمة المطلوبة</label>
+    <form id="bookingForm">
+      <label for="service">اختر الخدمة:</label>
       <select id="service" name="service" required>
-        <option value="">اختر الخدمة</option>
+        <option value="">اختر خدمة</option>
         <option value="تنظيف">تنظيف</option>
         <option value="ديكور">ديكور</option>
         <option value="صيانة">صيانة</option>
-        <option value="تصميم داخلي">تصميم داخلي</option>
       </select>
 
-      <label for="date">تاريخ الحجز</label>
+      <label for="date">تاريخ الموعد:</label>
       <input type="date" id="date" name="date" required />
 
-      <label for="time">الوقت المفضل</label>
+      <label for="time">وقت الموعد:</label>
       <input type="time" id="time" name="time" required />
 
-      <label for="notes">ملاحظات إضافية</label>
-      <textarea id="notes" name="notes" rows="4" placeholder="اكتب أي تفاصيل إضافية"></textarea>
+      <label for="notes">ملاحظات إضافية:</label>
+      <textarea id="notes" name="notes" rows="4" placeholder="أدخل أي ملاحظات..."></textarea>
 
-      <button type="submit">إرسال الطلب</button>
+      <button type="submit">إرسال الحجز</button>
     </form>
 
     <div class="links">
-      <a href="https://wa.me/9665XXXXXXXX" target="_blank">📱 تواصل عبر واتساب</a>
-      <a href="tel:05XXXXXXXX">📞 اتصل بنا مباشرة</a>
-      <a href="index.html">🏠 العودة للصفحة الرئيسية</a>
+      <a href="index.html">العودة للصفحة الرئيسية</a>
     </div>
   </div>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCSj0uczZh3rjglVNGD0GHYVm1O_8yMEKw",
+      authDomain: "ions-59fd0.firebaseapp.com",
+      projectId: "ions-59fd0",
+      storageBucket: "ions-59fd0.firebasestorage.app",
+      messagingSenderId: "64589609837",
+      appId: "1:64589609837:web:083a8e3126db3e8e86f794",
+      measurementId: "G-Q9WMMS52SQ"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const form = document.getElementById("bookingForm");
+    const successMessage = document.getElementById("successMessage");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const service = form.service.value;
+      const date = form.date.value;
+      const time = form.time.value;
+      const notes = form.notes.value;
+
+      try {
+        await addDoc(collection(db, "bookings"), {
+          service,
+          date,
+          time,
+          notes,
+          createdAt: new Date().toISOString()
+        });
+        successMessage.style.display = "block";
+        form.reset();
+
+        setTimeout(() => {
+          successMessage.style.display = "none";
+        }, 4000);
+      } catch (error) {
+        alert("❌ حدث خطأ أثناء إرسال البيانات: " + error.message);
+        console.error(error);
+      }
+    });
+  </script>
 </body>
 </html>
