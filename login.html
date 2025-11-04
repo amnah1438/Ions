@@ -1,111 +1,134 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>تسجيل دخول الأدمن</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>تسجيل دخول الأدمن | المنزل الراقي</title>
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
   <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
     body {
       font-family: "Noto Kufi Arabic", sans-serif;
-      background: linear-gradient(to right, #6d4c41, #3e2723);
+      background: linear-gradient(160deg, #1b120a, #5e3b18);
       color: #fff;
       display: flex;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
       height: 100vh;
-      margin: 0;
     }
+
     .login-box {
       background: #fff;
-      color: #3e2723;
-      padding: 25px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.3);
-      width: 300px;
+      color: #333;
+      padding: 35px 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.25);
+      width: 340px;
       text-align: center;
     }
+
+    h2 {
+      margin-bottom: 20px;
+      color: #5e3b18;
+    }
+
     input {
-      width: 90%;
+      width: 100%;
       padding: 10px;
       margin: 8px 0;
       border: 1px solid #ccc;
-      border-radius: 5px;
-      font-size: 14px;
+      border-radius: 8px;
+      font-size: 1rem;
     }
+
     button {
-      width: 95%;
+      width: 100%;
       padding: 10px;
-      background: #5d4037;
+      background: linear-gradient(160deg, #5e3b18, #a07955);
       color: #fff;
       border: none;
-      border-radius: 5px;
+      border-radius: 8px;
+      font-size: 1rem;
       cursor: pointer;
-      font-size: 15px;
+      margin-top: 10px;
+      transition: 0.3s;
     }
+
     button:hover {
-      background: #3e2723;
+      opacity: 0.9;
+      transform: scale(1.02);
     }
+
     .error {
       color: red;
-      font-size: 13px;
-      margin-top: 5px;
+      font-size: 0.9rem;
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
+
   <div class="login-box">
-    <h2>🔒 دخول الأدمن</h2>
-    <input type="email" id="email" placeholder="البريد الإلكتروني" />
-    <input type="password" id="password" placeholder="كلمة المرور" />
+    <h2>تسجيل دخول الأدمن</h2>
+    <input type="email" id="adminEmail" placeholder="البريد الإلكتروني" required>
+    <input type="password" id="adminPassword" placeholder="كلمة المرور" required>
     <button id="loginBtn">تسجيل الدخول</button>
-    <p class="error" id="errorText"></p>
+    <div id="errorMessage" class="error"></div>
   </div>
 
+  <!-- Firebase إعدادات -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js";
+    // Firebase App (المكتبة الأساسية)
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 
-    // ⚙️ إعدادات Firebase
+    // إعدادات Firebase الخاصة بمشروعك
     const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_PROJECT.firebaseapp.com",
-      projectId: "YOUR_PROJECT",
-      storageBucket: "YOUR_PROJECT.appspot.com",
-      messagingSenderId: "YOUR_SENDER_ID",
-      appId: "YOUR_APP_ID"
+      apiKey: "AIzaSyCSjQucZ3hrgjLvNGDOQ6HYVm1O_0yMEKw",
+      authDomain: "ions-59fd0.firebaseapp.com",
+      projectId: "ions-59fd0",
+      storageBucket: "ions-59fd0.firebasestorage.app",
+      messagingSenderId: "645809699837",
+      appId: "1:645809699837:web:03a8e3126bd3e8e8e6f794",
+      measurementId: "G-QW9MM55ZQS"
     };
 
-    // 🔹 التهيئة
+    // تهيئة التطبيق
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    const emailInput = document.getElementById("email");
-    const passwordInput = document.getElementById("password");
     const loginBtn = document.getElementById("loginBtn");
-    const errorText = document.getElementById("errorText");
+    const errorMessage = document.getElementById("errorMessage");
 
     loginBtn.addEventListener("click", async () => {
-      const email = emailInput.value;
-      const password = passwordInput.value;
+      const email = document.getElementById("adminEmail").value.trim();
+      const password = document.getElementById("adminPassword").value.trim();
+
+      if (!email || !password) {
+        errorMessage.textContent = "الرجاء إدخال البريد وكلمة المرور.";
+        return;
+      }
+
       try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        // ✅ نجاح الدخول
-        window.location.href = "admin.html";
-      } catch (error) {
-        console.log(error.code);
-        switch (error.code) {
-          case "auth/invalid-email":
-            errorText.textContent = "📧 البريد الإلكتروني غير صالح.";
-            break;
-          case "auth/user-not-found":
-            errorText.textContent = "🚫 المستخدم غير موجود.";
-            break;
-          case "auth/wrong-password":
-            errorText.textContent = "❌ كلمة المرور غير صحيحة.";
-            break;
-          default:
-            errorText.textContent = "⚠️ حدث خطأ أثناء تسجيل الدخول.";
+        const user = userCredential.user;
+
+        // التحقق من بريد الأدمن المصرح له فقط
+        if (email === "admin@almnz.com") {
+          window.location.href = "admin-dashboard.html"; // تحويل للوحة التحكم
+        } else {
+          errorMessage.textContent = "ليس لديك صلاحية الدخول إلى لوحة التحكم.";
         }
+      } catch (error) {
+        if (error.code === "auth/user-not-found" || error.code === "auth/wrong-password") {
+          errorMessage.textContent = "البريد الإلكتروني أو كلمة المرور غير صحيحة.";
+        } else if (error.code === "auth/invalid-email") {
+          errorMessage.textContent = "صيغة البريد الإلكتروني غير صحيحة.";
+        } else {
+          errorMessage.textContent = "حدث خطأ أثناء تسجيل الدخول. حاول مرة أخرى.";
+        }
+        console.error("Login Error:", error);
       }
     });
   </script>
