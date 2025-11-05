@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>دخول الأدمن | المنزل الراقي</title>
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
   <style>
     body {
       font-family: "Noto Kufi Arabic", sans-serif;
@@ -80,12 +81,12 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
 
-    // إعدادات Firebase (خاصة بمشروعك)
+    // ✅ إعدادات Firebase الصحيحة لمشروعك
     const firebaseConfig = {
-      apiKey: "AIzaSyCsjQucZ3hrgiLwGDOQ6HYVm10_0yMEKw",
+      apiKey: "AIzaSyCSjQucZ3hrgjLvNGDOQ6HYVm1O_0yMEKw",
       authDomain: "ions-59fd0.firebaseapp.com",
       projectId: "ions-59fd0",
-      storageBucket: "ions-59fd0.appspot.com",
+      storageBucket: "ions-59fd0.firebasestorage.app",
       messagingSenderId: "645809699837",
       appId: "1:645809699837:web:03a8e3126bd3e8e8e6f794",
       measurementId: "G-QW9MM55ZQS"
@@ -108,14 +109,15 @@
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
-        // تحقق من أنه الأدمن
+        // ✅ تحقق من أنه الأدمن الحقيقي
         if (user.email === "admin@eleganthome.com") {
+          alert("✅ تم تسجيل الدخول بنجاح");
           window.location.href = "admin.html"; // توجيه إلى لوحة التحكم
         } else {
           errorText.textContent = "❌ ليس لديك صلاحية الدخول إلى لوحة التحكم.";
         }
       } catch (error) {
-        console.error(error.code, error.message);
+        console.error("Error:", error.code, error.message);
         switch (error.code) {
           case "auth/invalid-email":
             errorText.textContent = "⚠️ البريد الإلكتروني غير صالح.";
@@ -125,6 +127,12 @@
             break;
           case "auth/wrong-password":
             errorText.textContent = "⚠️ كلمة المرور غير صحيحة.";
+            break;
+          case "auth/network-request-failed":
+            errorText.textContent = "⚠️ تحقق من اتصال الإنترنت.";
+            break;
+          case "auth/api-key-not-valid":
+            errorText.textContent = "⚠️ مفتاح Firebase غير صالح.";
             break;
           default:
             errorText.textContent = "⚠️ حدث خطأ أثناء تسجيل الدخول.";
