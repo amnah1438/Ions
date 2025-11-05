@@ -111,8 +111,7 @@
 
         // ✅ تحقق من أنه الأدمن الحقيقي
         if (user.email === "admin@eleganthome.com") {
-          alert("✅ تم تسجيل الدخول بنجاح");
-          window.location.href = "admin.html"; // توجيه إلى لوحة التحكم
+          window.location.href = "admin.html"; // ✅ توجيه تلقائي إلى لوحة التحكم بعد النجاح
         } else {
           errorText.textContent = "❌ ليس لديك صلاحية الدخول إلى لوحة التحكم.";
         }
