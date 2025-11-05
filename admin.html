@@ -101,13 +101,13 @@
     <button class="logout-btn" id="logout">تسجيل الخروج</button>
   </div>
 
-  <!-- Firebase -->
+  <!-- ✅ Firebase -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
 
-    // ✅ إعدادات Firebase الجديدة
+    // ✅ إعدادات Firebase الصحيحة (مطابقة لـ login.html)
     const firebaseConfig = {
       apiKey: "AIzaSyCSjQucZ3hrgjLvNGDOQ6HYVm1O_0yMEKw",
       authDomain: "ions-59fd0.firebaseapp.com",
@@ -134,6 +134,11 @@
           const tableBody = table.querySelector("tbody");
           tableBody.innerHTML = "";
 
+          if (querySnapshot.empty) {
+            loadingText.textContent = "🚫 لا توجد حجوزات حالياً.";
+            return;
+          }
+
           querySnapshot.forEach((doc) => {
             const data = doc.data();
             const row = `
@@ -149,8 +154,12 @@
           loadingText.style.display = "none";
           table.style.display = "table";
         } catch (error) {
-          loadingText.textContent = "حدث خطأ أثناء تحميل البيانات.";
           console.error("Firestore error:", error);
+          if (error.code === "permission-denied") {
+            loadingText.textContent = "⚠️ لا توجد صلاحية للوصول إلى البيانات. تحقق من قواعد Firestore.";
+          } else {
+            loadingText.textContent = "حدث خطأ أثناء تحميل البيانات. 🚫";
+          }
         }
       } else {
         alert("غير مصرح بالدخول 🚫");
